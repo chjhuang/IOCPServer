@@ -28,7 +28,7 @@ namespace IOCPServer
         /// <summary>
         /// 用于每个I/O Socket操作的缓冲区大小
         /// </summary>
-        private int _bufferSize = 1024;
+        private int _bufferSize;
 
         /// <summary>
         /// 监听Socket，用于接受客户端的连接请求
@@ -73,14 +73,6 @@ namespace IOCPServer
         /// 监听的端口
         /// </summary>
         public int Port { get; private set; }
-        /// <summary>
-        /// 通信使用的编码
-        /// </summary>
-        public Encoding Encoding { get; set; }
-        /// <summary>
-        /// 服务器文件路径
-        /// </summary>
-        public string ContentPath { get; set; }
 
         #endregion
 
@@ -91,8 +83,8 @@ namespace IOCPServer
         /// </summary>
         /// <param name="listenPort">监听的端口</param>
         /// <param name="maxClient">最大的客户端数量</param>
-        public IOCPServer(int listenPort, int maxClient,string contentPath)
-            : this(IPAddress.Any, listenPort, maxClient, contentPath)
+        public IOCPServer(int listenPort, int maxClient)
+            : this(IPAddress.Any, listenPort, maxClient)
         {
         }
 
@@ -101,8 +93,8 @@ namespace IOCPServer
         /// </summary>
         /// <param name="localEP">监听的终结点</param>
         /// <param name="maxClient">最大客户端数量</param>
-        public IOCPServer(IPEndPoint localEP, int maxClient, string contentPath)
-            : this(localEP.Address, localEP.Port, maxClient, contentPath)
+        public IOCPServer(IPEndPoint localEP, int maxClient)
+            : this(localEP.Address, localEP.Port, maxClient)
         {
         }
 
@@ -112,26 +104,24 @@ namespace IOCPServer
         /// <param name="localIPAddress">监听的IP地址</param>
         /// <param name="listenPort">监听的端口</param>
         /// <param name="maxClient">最大客户端数量</param>
-        public IOCPServer(IPAddress localIPAddress, int listenPort, int maxClient,string contentPath)
+        public IOCPServer(IPAddress localIPAddress, int listenPort, int maxClient)
         {
             this.Address = localIPAddress;
             this.Port = listenPort;
-            this.Encoding = Encoding.UTF8;
-            this.ContentPath = contentPath;
 
             _maxClient = maxClient;
+            _bufferSize = Config.BUFFER_SIZE;
 
             _serverSock = new Socket(localIPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _bufferManager = new BufferManager(_bufferSize * _maxClient, _bufferSize);
             _objectPool = new SocketAsyncEventArgsPool(_maxClient);
             _maxAcceptedClients = new Semaphore(_maxClient, _maxClient);
 
-            _util = new Util(this.Encoding, this.ContentPath);
+            _util = new Util();
             _util.ResponseReady += new ResponseEventHandler(OnResponseReady);
         }
 
         #endregion
-
 
         #region 初始化
 
@@ -333,7 +323,6 @@ namespace IOCPServer
         /// <param name="e">与接收完成操作相关联的SocketAsyncEventArg对象</param>
         private void ProcessReceive(SocketAsyncEventArgs e)
         {
-            System.Console.WriteLine(e.SocketError.ToString());
             if (e.SocketError == SocketError.Success)
             {
                 if(e.BytesTransferred > 0)
@@ -348,7 +337,7 @@ namespace IOCPServer
                         byte[] data = new byte[e.BytesTransferred];
                         Array.Copy(e.Buffer, e.Offset, data, 0, data.Length);//从e.Buffer块中复制数据出来，保证它可重用
                         info = Encoding.UTF8.GetString(data);
-                        Log4Debug(String.Format("收到 {0} {1}字节 数据为\n{2}", s.RemoteEndPoint.ToString(), data.Length, info));
+                        IOCPServer.Log4Debug(String.Format("收到 {0} {1}字节 数据为\n{2}", s.RemoteEndPoint.ToString(), data.Length, info));
 
                         //处理HTTP请求
                         _util.processRequest(e, info);
@@ -401,9 +390,9 @@ namespace IOCPServer
             Socket s = (Socket)e.UserToken;
             if (s.Connected)
             {
-                System.Console.WriteLine(String.Format("待异步发送数据 {0}字节", data.Length));
+                Log4Debug(String.Format("发送数据到 {0} {1}字节", s.RemoteEndPoint.ToString(), data.Length));
+
                 e.SetBuffer(data, 0, data.Length); //设置发送数据
-                
                 if (!s.SendAsync(e))//投递发送请求，这个函数有可能同步发送出去，这时返回false，并且不会引发SocketAsyncEventArgs.Completed事件
                 {
                     // 同步发送时处理发送完成事件
@@ -463,11 +452,8 @@ namespace IOCPServer
         /// <param name="e">与发送完成操作相关联的SocketAsyncEventArg对象</param>
         private void ProcessSend(SocketAsyncEventArgs e)
         {
-            System.Console.WriteLine(e.SocketError.ToString());
             if (e.SocketError == SocketError.Success)
             {
-                System.Console.WriteLine("数据发送成功！");
-
                 Socket s = (Socket)e.UserToken;
 
                 /* TODO
@@ -571,7 +557,7 @@ namespace IOCPServer
         }
         #endregion
 
-        public void Log4Debug(string msg)
+        public static void Log4Debug(string msg)
         {
             Console.WriteLine("notice:" + msg);
         }

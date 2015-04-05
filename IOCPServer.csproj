@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,8 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BufferManager.cs" />
+    <Compile Include="ILogWriter.cs" />
     <Compile Include="IOCPServer.cs" />
-    <Compile Include="Processor\ResponseEventArgs.cs" />
+    <Compile Include="Processor\ConfigHandler.cs" />
+    <Compile Include="Processor\HttpRequest.cs" />
+    <Compile Include="Processor\HttpResponse.cs" />
+    <Compile Include="Processor\HttpResponseFactory.cs" />
     <Compile Include="Processor\ResponseEventHandler.cs" />
     <Compile Include="SocketAsyncEventArgsPool.cs" />
     <Compile Include="Program.cs" />
