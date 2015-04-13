@@ -1,96 +1,144 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Diagnostics;
+using System.Text;
 
-namespace IOCPServer
+namespace HttpServer
 {
-    //定义日志类型的枚举值
-
-    public enum logType { 
-        //追踪程序流的日志条目
+    
+    //枚举日志优先级条目
+    public enum LogPrio
+    {
+        /// <summary>
+        /// 追踪程序流的日志条目
+        /// </summary>
         Trace,
 
-        //追踪状态改变信息
-        Info,
-
-        //帮助debug应用的日志条目
+        /// <summary>
+        /// 帮助debug应用的日志条目
+        /// </summary>
         Debug,
 
-        //警告信息条目
+        /// <summary>
+        /// 追踪状态改变信息
+        /// </summary>
+        Info,
+
+        /// <summary>
+        /// 警告信息
+        /// </summary>
         Warning,
 
-        //错误条目
+        /// <summary>
+        /// 错误
+        /// </summary>
         Error,
 
-        //严重错误条目
+        /// <summary>
+        /// 严重错误
+        /// </summary>
         Fatal
     }
-    public interface ILogWriter{
 
-        // 向日志文件写入一条日志信息
-        void writeLog(object source , logType type , string messages);
+    /// <summary>
+    /// 写日志文件接口ILogWriter
+    /// </summary>
 
+    public interface ILogWriter
+    {
+        /// <summary>
+        /// 向日志文件写一条信息
+        /// </summary>
+       
+        void Write(object source, LogPrio priority, string message);
     }
 
-    public sealed class LogWriter:ILogWriter  {
-        public static readonly LogWriter logWriter = new LogWriter();
+    /// <summary>
+    /// 接口实现
+    /// </summary>
+    public sealed class ConsoleLogWriter : ILogWriter
+    {
+        public static readonly ConsoleLogWriter Instance = new ConsoleLogWriter();
 
-        //实现接口函数
-        public void writeLog(object source, logType type, string messages) {
-            StringBuilder log = new StringBuilder();
-            log.Append(DateTime.Now.ToString());
-            log.Append(" ");
-            log.Append(type.ToString().PadRight(10));
-            log.Append(" | ");
+        /// <summary>
+        /// 写日志消息，实现接口
+        /// </summary>
+
+        public void Write(object source, LogPrio prio, string message)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(DateTime.Now.ToString());
+            sb.Append(" ");
+            sb.Append(prio.ToString().PadRight(10));
+            sb.Append(" | ");
 #if DEBUG
-            StackTrace stackTrace = new StackTrace();
-            StackFrame[] stackFrames = stackTrace.GetFrames();
-            int endFrame = stackFrames.Length > 4 ? 4 : stackFrames.Length;
-            int startFrame = stackFrames.Length > 0 ? 1 : 0;
-            for(int i = startFrame ; i < endFrame ; ++i){
-                log.Append(stackFrames[i].GetMethod().Name);
-                log.Append(" -> ");
+            StackTrace trace = new StackTrace();
+            StackFrame[] frames = trace.GetFrames();
+            int endFrame = frames.Length > 4 ? 4 : frames.Length;
+            int startFrame = frames.Length > 0 ? 1 : 0;
+            for (int i = startFrame; i < endFrame; ++i)
+            {
+                sb.Append(frames[i].GetMethod().Name);
+                sb.Append(" -> ");
             }
 #else
-            log.Append(System.Reflection.MethodBase.GetCurrentMethod().Name);
-            log.Append（" | "）;
+            sb.Append(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            sb.Append(" | ");
 #endif
-            log.Append(messages);
+            sb.Append(message);
 
-            Console.ForegroundColor = getColor(type);
-            Console.WriteLine(log.ToString());
+            Console.ForegroundColor = GetColor(prio);
+            Console.WriteLine(sb.ToString());
             Console.ForegroundColor = ConsoleColor.Gray;
 
+            //将日志写入目标文件
+            string logPath = HttpContext.Current.Server.MapPath("log.txt"); //文件相对路径
+            if (System.IO.File.Exists(logPath))
+            {
+                System.IO.StreamWriter sw = new System.IO.StreamWriter(logPath, true, Encoding.UTF8);
+                sw.WriteLine(sb);
+                sw.Close();
+            }
+
         }
 
-        //将不同类型的日志异色显示
-        public static ConsoleColor getColor(logType type){
-            switch (type) { 
-                case logType.Trace:
-                    return ConsoleColor.Blue;
-                case logType.Info:
-                    return ConsoleColor.Cyan;
-                case logType.Debug:
+        /// <summary>
+        /// 将不同优先级的日志项异色显示
+        /// </summary>
+        public static ConsoleColor GetColor(LogPrio prio)
+        {
+            switch (prio)
+            {
+                case LogPrio.Trace:
                     return ConsoleColor.DarkGray;
-                case logType.Warning:
-                    return ConsoleColor.Red;
-                case logType.Error:
+                case LogPrio.Debug:
+                    return ConsoleColor.Gray;
+                case LogPrio.Info:
+                    return ConsoleColor.White;
+                case LogPrio.Warning:
+                    return ConsoleColor.DarkMagenta;
+                case LogPrio.Error:
                     return ConsoleColor.Magenta;
-                case logType.Fatal:
-                    return ConsoleColor.DarkRed;
+                case LogPrio.Fatal:
+                    return ConsoleColor.Red;
             }
 
-            return ConsoleColor.Green;
+            return ConsoleColor.Yellow;
         }
+    }
 
-        //空日志Writer
-        public sealed class NullLogWriter : ILogWriter {
-            public static readonly NullLogWriter nullLogWriter = new NullLogWriter();
+    /// <summary>
+    /// 默认的日志Writer
+    /// </summary>
 
-            public void writeLog(object source, logType type, string messages) { 
-            }
-        } 
+    public sealed class NullLogWriter : ILogWriter
+    {
+
+        public static readonly NullLogWriter Instance = new NullLogWriter();
+
+        /// <summary>
+        /// 显示为空
+        /// </summary>
+        public void Write(object source, LogPrio prio, string message)
+        {}
     }
 }
