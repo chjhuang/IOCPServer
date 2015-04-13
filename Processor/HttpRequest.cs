@@ -114,6 +114,7 @@ namespace IOCPServer
                     }
                 case HTTPMethod.POST:
                     {
+                        this.header.url = reqLineFields[1];
                         string paramStr = HttpUtility.UrlDecode(this.content).Trim();
                         string[] parames = paramStr.Split('&');
                         foreach (string item in parames)

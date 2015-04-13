@@ -96,7 +96,7 @@ namespace IOCPServer
                             //}
                             if (File.Exists(Config.INDEX_PATH))
                             {
-                                return OKResponse(readFile(Config.INDEX_PATH), extensions[Config.INDEX_PATH.Trim().Substring(Config.INDEX_PATH.Trim().LastIndexOf('.'))]);
+                                return OKResponse(readFile(Config.INDEX_PATH), extensions[Config.INDEX_PATH.Trim().Substring(Config.INDEX_PATH.Trim().LastIndexOf('.')+1)]);
                             }
                             else
                             {
