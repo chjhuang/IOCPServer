@@ -195,19 +195,65 @@ namespace IOCPServer
         public HttpResponse getConfigData()
         {
             HttpResponse httpResponse = new HttpResponse();
+            //获取配置文件对象
             ConfigHandler config = new ConfigHandler("webapps\\config.properties");
-            string response = "<form action=\"/config.html\" method=\"post\">";
+            
+            //将返回值硬编码进response中
+            string titleStr = "CGLZ Simple Web Server Configuration";
+            string container = "<div class=\"config\">";
+            string containerend = "</div>";
+            //构造response内容
+            string responseBody = container+ "<form action=\"/config.html\" method=\"post\">";
+            
             foreach (object item in config.Keys)
             {
-                response += "<lable>" + item.ToString() + " = </lable>" +
-                            "<input type=\"text\" name=\"" + item.ToString() + "\" value=\"" + config[item] + "\">" + "</input><br/>";
+                responseBody += "<lable class=\"con_name\">" + translate(item.ToString()) + "</lable>" +
+                            "<input class=\"noneinput\" type=\"text\" name=\"" + item.ToString() + "\" value=\"" + config[item] + "\">" + "</input><br/>";
             }
-            response += "<input type=\"submit\" value=\"提交\">" + "</form>";
+            responseBody += "<input class=\"change\"type=\"submit\" value=\"提交\"></input>";
+            responseBody += "<br/><br/><br/><a class=\"back\" href=\"index.html\">返回主页</a>";
+            responseBody += "</form>" + containerend;
 
-            httpResponse.content = Config.ENCODING.GetBytes("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></head><body><h2>CGLZ Simple Web Server</h2><div>"
-                + response + "</div></body></html>");
+            
+            //获取二进制数据
+            httpResponse.content = Config.ENCODING.GetBytes(
+                "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">"
+                +"<link href=\"css\\style.css\" rel=\"stylesheet\" type=\"text/css\" media=\"all\">"
+                + "</head><body><div align=\"center\"><h2>" + titleStr + "</h2></div>"
+                + responseBody + "</body></html>");
             httpResponse.header = genResponseHeader(StatusCode.OK, "text/html", httpResponse.content.Length);
             return httpResponse;
+        }
+        /// <summary>
+        /// 这个函数的作用是将服务器中的一些条目的名字翻译成中文以供显示需要
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string translate(string input)
+        {
+            string output = "";
+            switch (input)
+            { 
+                case "index_path":
+                    output = "首页路径";
+                    break;
+                case "path":
+                    output = "服务器根目录";
+                    break;
+                case "timeout":
+                    output = "等待时间(毫秒)";
+                    break;
+                case "max_client":
+                    output = "最大并发连接数";
+                    break;
+                case "buffer_size":
+                    output = "缓冲区大小（字节）";
+                    break;
+                case "encoding":
+                    output = "服务器编码";
+                    break;
+            }
+            return output;
         }
         
         /// <summary>
@@ -224,11 +270,13 @@ namespace IOCPServer
             header.statCode = responseCode;
             header.headerFields.Add("Server", "CGLZ Simple Web Server");
             if(Config.TIMEOUT > 0)
-            {//长连接
+            {
+                //长连接
                 header.headerFields.Add("Connection", ConnectionType.Keep_Alive.ToString());
             }
             else
-            {//短连接
+            {
+                //短连接
                 header.headerFields.Add("Connection", ConnectionType.Close.ToString());
             }
             header.headerFields.Add("Content-Length", contentLength.ToString());

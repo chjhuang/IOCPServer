@@ -1,0 +1,118 @@
+body{
+	background:#fff;
+	font-family: 'Oswald', sans-serif;
+}
+/*--choose--*/
+.choose{
+	text-align: center;
+	padding: 1em 0;
+}
+.choose h3{
+	text-transform: uppercase;
+	font-size: 2.5em;
+	margin: 0;
+	color: #000;
+	font-weight: 700;
+	padding: 0.5em 0 1em;
+}
+.choose-us {
+	padding: 4em 0 6em;
+}
+.pencil{
+	float:left;
+}
+.beautiful{
+	float: right;
+	width: 76%;
+	padding: 0.5em 0;
+}
+.pencil span.pen{
+	background: url(../images/pencil.png) 0px 0px;
+	display:block;
+	width:165px;
+	height:165px;
+}
+.pencil span.set{
+	background-position: 0px -202px;
+}
+.pencil span.circle{
+	background-position: 0px -401px;
+}
+.pencil span.star{
+	background-position: 0px -607px;
+}
+.beautiful h5{
+	margin: 0;
+	padding: 0.5em 0;
+	font-size: 1.4em;
+	text-transform: uppercase;
+}
+.beautiful label{
+	margin: 0;
+	font-size: 1em;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+}
+.beautiful p{
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.1em;
+	width: 95%;
+	margin: 0;
+	line-height: 25px;
+	padding: 1em 0;
+	color: #666666;
+}
+.why-choose {
+	margin: 0 auto;
+	width: 68%;
+	padding: 1em 0;
+}
+
+/*--config--*/
+.config{
+	text-align: center;
+	padding: 1em 0;
+    filter : progidximagetransform.microsoft.dropshadow(color=#ff404040,offx=2,offy=2,positives=true);
+}
+.con_name{
+	text-align: left;
+	display:inline-block;/*单独设置一个width是不能使lable的宽度固定的，要配合上这个属性才可以*/
+	height:40px;
+	width: 180px;
+	font-size: 1.2em;
+}
+.change{
+	font-family: "tahoma", "宋体"; /*www.52css.com*/
+    font-size: 15pt; color: #003366;
+    border: 2px #93bee2 solid;
+    border-bottom: #93bee2 4px solid;
+    border-left: #93bee2 4px solid;
+    border-right: #93bee2 4px solid;
+    border-top: #93bee2 4px solid;
+    background-color: #ffffff;
+    cursor: hand;
+    font-style: normal ;
+}
+
+.shadow {
+    position:absolute;
+    z-index:1000;
+    top:0px;
+    left:0px; /*www.52css.com*/
+    background:gray;
+    background-color:#ffcc00;
+    filter : progidximagetransform.microsoft.dropshadow(color=#ff404040,offx=2,offy=2,positives=true);
+}
+/*没有边框的输入框*/
+.noneinput{
+    text-align:center;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    background-color: #f6f6f6;
+    border-bottom-style: none;
+	font-size: 1.2em;
+}
+.back{
+	text-align:center;
+}
