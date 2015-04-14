@@ -51,5 +51,40 @@ namespace IOCPServer
 
     }
 
+    //存储与客户端链接socket
+    public class SocketAsyncEventArgsList : Object
+    {
+        private List<SocketAsyncEventArgs> m_list;
+
+        public SocketAsyncEventArgsList()
+        {
+            m_list = new List<SocketAsyncEventArgs>();
+        }
+
+        public void Add(SocketAsyncEventArgs userToken)
+        {
+            lock (m_list)
+            {
+                m_list.Add(userToken);
+            }
+        }
+
+        public void Remove(SocketAsyncEventArgs userToken)
+        {
+            lock (m_list)
+            {
+                m_list.Remove(userToken);
+            }
+        }
+
+        public void CopyList(ref SocketAsyncEventArgs[] array)
+        {
+            lock (m_list)
+            {
+                array = new SocketAsyncEventArgs[m_list.Count];
+                m_list.CopyTo(array);
+            }
+        }
+    }
 
 }

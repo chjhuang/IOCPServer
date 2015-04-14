@@ -51,6 +51,21 @@ namespace IOCPServer
         SocketAsyncEventArgsPool _objectPool;
 
         /// <summary>
+        /// 超时线程
+        /// </summary>
+        private DaemonThread m_daemonThread;
+        /// <summary>
+        /// 最长等待时间
+        /// </summary>
+        private int max_time;
+
+        /// <summary>
+        /// 连接客户端列表
+        /// </summary>
+        private SocketAsyncEventArgsList _objectList;
+        public SocketAsyncEventArgsList _ObjectList { get { return _objectList; } }
+
+        /// <summary>
         /// 请求处理函数
         /// </summary>
         Util _util;
@@ -117,6 +132,13 @@ namespace IOCPServer
             _objectPool = new SocketAsyncEventArgsPool(_maxClient);
             _maxAcceptedClients = new Semaphore(_maxClient, _maxClient);
 
+            //初始行已链接socket列表
+            _objectList = new SocketAsyncEventArgsList();
+            // 设置超时时间
+            //max_time = (int)Config.TIMEOUT;
+            max_time = 10;
+            Console.WriteLine("超时时间为{0}", Config.TIMEOUT);
+
             _util = new Util();
             _util.ResponseReady += new ResponseEventHandler(OnResponseReady);
         }
@@ -147,6 +169,8 @@ namespace IOCPServer
                 // add SocketAsyncEventArg to the pool
                 _objectPool.Push(readWriteEventArg);
             }
+            //打开超时检查线程
+            m_daemonThread = new DaemonThread(this);
         }
 
         #endregion
@@ -259,6 +283,11 @@ namespace IOCPServer
                         //将对象池中的一个空闲对象取出与当前的用户socket绑定
                         SocketAsyncEventArgs asyniar = _objectPool.Pop();
 
+                        //添加已连接客户端socket列表
+                        _objectList.Add(asyniar);
+                        //设置最长等待时间
+                        e.AcceptSocket.ReceiveTimeout = max_time;
+
                         // assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
                         _bufferManager.SetBuffer(asyniar);
                         asyniar.UserToken = s;
@@ -327,6 +356,7 @@ namespace IOCPServer
             {
                 if(e.BytesTransferred > 0)
                 {
+                    ((Socket)e.UserToken).ReceiveTimeout = max_time;
                     string info = "";
                     // 检查远程主机是否关闭连接
                     Socket s = (Socket)e.UserToken;
@@ -342,6 +372,11 @@ namespace IOCPServer
                         //处理HTTP请求
                         _util.processRequest(e, info);
                     }
+                }
+                
+                else if (e.SocketError == SocketError.OperationAborted)
+                {
+                    return;
                 }
                 else
                 {
@@ -391,6 +426,9 @@ namespace IOCPServer
             if (s.Connected)
             {
                 Log4Debug(String.Format("发送数据到 {0} {1}字节", s.RemoteEndPoint.ToString(), data.Length));
+
+                //SendTimeout置1，表示正在发送数据，即使RecvTimeout为0，也不关闭连接
+                ((Socket)e.UserToken).SendTimeout = 1;
 
                 e.SetBuffer(data, 0, data.Length); //设置发送数据
                 if (!s.SendAsync(e))//投递发送请求，这个函数有可能同步发送出去，这时返回false，并且不会引发SocketAsyncEventArgs.Completed事件
@@ -454,21 +492,26 @@ namespace IOCPServer
         {
             if (e.SocketError == SocketError.Success)
             {
+                //重置超时时间
+                ((Socket)e.UserToken).ReceiveTimeout = max_time;
+                //SendTimeout置零
+                ((Socket)e.UserToken).SendTimeout = 0;
+
                 Socket s = (Socket)e.UserToken;
 
                 /* TODO
                  * 长连接(keep-alive)模式下，等待下一个接收数据，应该实现超时断开连接机制
                  */
-                //if (!s.ReceiveAsync(e))//为接收下一段数据，投递接收请求，这个函数有可能同步完成，这时返回false，并且不会引发SocketAsyncEventArgs.Completed事件
-                //{
+                if (!s.ReceiveAsync(e))//为接收下一段数据，投递接收请求，这个函数有可能同步完成，这时返回false，并且不会引发SocketAsyncEventArgs.Completed事件
+                {
                     //同步接收时处理接收完成事件
-                //    ProcessReceive(e);
-                //}
+                    ProcessReceive(e);
+                }
 
                 /*
                  * 短连接模式，关闭Socket连接
                  */
-                CloseClientSocket(e);
+                //CloseClientSocket(e);
             }
             else
             {
@@ -485,14 +528,14 @@ namespace IOCPServer
         /// 关闭socket连接
         /// </summary>
         /// <param name="e">SocketAsyncEventArg associated with the completed send/receive operation.</param>
-        private void CloseClientSocket(SocketAsyncEventArgs e)
+        public void CloseClientSocket(SocketAsyncEventArgs e)
         {
             Socket s = e.UserToken as Socket;
 
             try
             {
                 s.Shutdown(SocketShutdown.Both);
-
+                Console.WriteLine("执行了一次关闭操作");
                 Log4Debug(String.Format("客户 {0} 断开连接!", s.RemoteEndPoint.ToString()));
             }
             catch (Exception)
@@ -501,15 +544,21 @@ namespace IOCPServer
             }
             finally
             {
-                s.Close();
+                try
+                {
+                    s.Close();
+                    _bufferManager.FreeBuffer(e); //释放内存
+                    e.UserToken = null;  //释放资源
+                    _objectPool.Push(e);//SocketAsyncEventArg对象被释放，压入可重用队列。
+                    _objectList.Remove(e);
+                    _maxAcceptedClients.Release();  //断开连接，可以接收的连接数+1
+                    Interlocked.Decrement(ref _clientCount);
+                    Console.WriteLine("现在的连接数量为{0}", _clientCount);
+                }
+                catch (Exception)
+                {
 
-                Interlocked.Decrement(ref _clientCount);
-
-                _maxAcceptedClients.Release();  //断开连接，可以接收的连接数+1
-
-                _bufferManager.FreeBuffer(e); //释放内存
-                e.UserToken = null;  //释放资源
-                _objectPool.Push(e);//SocketAsyncEventArg对象被释放，压入可重用队列。
+                }
             }           
         }
 
