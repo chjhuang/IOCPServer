@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<config>
+  <web_root>webapps</web_root>
+  <index_path>webapps/index.html</index_path>
+  <max_client>1024</max_client>
+  <encoding>utf-8</encoding>
+  <server_port>8088</server_port>
+  <buffer_size>1024</buffer_size>
+  <timeout>5</timeout>
+</config>

@@ -52,7 +52,7 @@ namespace IOCPServer
     }
 
     //存储与客户端链接socket
-    public class SocketAsyncEventArgsList : Object
+    public class SocketAsyncEventArgsList
     {
         private List<SocketAsyncEventArgs> m_list;
 

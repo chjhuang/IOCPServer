@@ -6,6 +6,7 @@ using System.Web;
 using System.Collections;
 using System.IO;
 using System.Threading;
+using System.Xml;
 
 
 /*
@@ -123,188 +124,130 @@ namespace IOCPServer
     /// <summary>
     /// 类名：ConfigHandler 
     /// </summary> 
-    public class ConfigHandler : System.Collections.Hashtable
+    public class ConfigHandler
     {
         #region Properties
         /// <summary>
-        /// 配置文件中存在的键
+        /// 配置文件中存在的键和对应的初始值
         /// </summary>
-        private ArrayList keys = new ArrayList();
+        public Dictionary<string, object> configs = new Dictionary<string, object>(){
+                {"web_root","webapps"},
+                {"index_path","webapps/index.html"},
+                {"max_client",1024},
+                {"encoding","utf-8"},
+                {"server_port",8088},
+                {"buffer_size",1024},
+                {"timeout",10}
+            };
         
         /// <summary>
         /// 配置文件所在路径
         /// </summary>
-        private String fileName = string.Empty;              //要读写的Properties文件名
+        public static String FILENAME = string.Empty;              //要读写的Properties文件名
 
         
         #endregion
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="fileName">文件名</param>
-        public ConfigHandler(String fileName)
-        {
-            this.setFileName(fileName);
-            load(fileName);
-        }
-   
-        private void setFileName(string filePath)
-        {
-            this.fileName = filePath;
-        }
-
+        public ConfigHandler(){ }
         /// <summary>
-        /// 重写Add方法,实现按添加顺序排列
+        /// 服务器开始运行时调用的初始化方法，这个方法的
+        /// 作用是赋予静态类Config各个属性的值
         /// </summary>
-        /// <param name="key">key</param>
-
-        ///<param name="value">value</param>
-        /// <returns></returns>    
-        public override void Add(object key, object value)
+        /// <param name="fileName"></param>
+        public void Init(string fileName)
         {
-            if (keys.Contains(key))
+            FILENAME = fileName;
+            
+            if(!File.Exists(fileName))
             {
-                base[key] = value;
-                return;
-            }
-            base.Add(key, value);
-            keys.Add (key);
-        }
-        
-        
-        public override ICollection Keys
-        {
-            get
-            {
-                return keys;
-            }
-        }
- 
-        /// <summary>
-        /// 导入文件
-        /// </summary>
-        /// <param name="filePath">要导入的文件</param>
-        /// <returns></returns>
-        private void load(string filePath)
-        {
-            char[] convertBuf = new char[1024];
-            int limit;
-            int keyLen;
-            int valueStart;
-            char c;
-            string bufLine = string.Empty;
-            bool hasSep;
-            bool precedingBackslash;
- 
-            using (StreamReader sr = new StreamReader(filePath))
-            {
-                while(sr.Peek()>=0)
+                //如果不存在配置文件，就按照默认值创建一个
+                XMLHelper.CreateXmlDocument(fileName,"config","1.0","utf-8","yes");
+                foreach(string item in configs.Keys)
                 {
-                    bufLine = sr.ReadLine();
-                    limit = bufLine.Length;
-                    keyLen = 0;
-                    valueStart = limit;
-                    hasSep = false;
-                    precedingBackslash = false;
-                    if(bufLine.StartsWith("#"))
-                        keyLen = bufLine.Length;
-
-                    while (keyLen < limit)
-                    {
-                        c = bufLine[keyLen];
-                        if ((c == '=' || c == ':') & !precedingBackslash)
-                        {
-                            valueStart = keyLen + 1;
-                            hasSep = true;
-                            break;
-                        }
-                        else if ((c == ' ' || c == '\t' || c == '\f') & !precedingBackslash)
-                        {
-                            valueStart = keyLen + 1;
-                            break;
-                        }
-                        if (c == '\\')
-                        {
-                            precedingBackslash = !precedingBackslash;
-                        }
-                        else
-                        {
-                            precedingBackslash = false;
-                        }
-                        keyLen++;
-                    }
- 
-                        
-                    while (valueStart < limit) 
-                    {
-                        c = bufLine[valueStart];
-                        if (c != ' ' && c != '\t' &&  c != '\f') 
-                        {
-                            if (!hasSep && (c == '=' ||  c == ':')) 
-                            {
-                                hasSep = true;
-                            } 
-                            else 
-                            {
-                                break;
-                            }
-                        }
-                        valueStart++;
-                    }
- 
-                    string key = bufLine.Substring(0,keyLen);
-      
-                    string values = bufLine.Substring(valueStart,limit-valueStart);
- 
-                    if(key=="")
-                        key += "#";
-                    while(key.StartsWith("#")&this.Contains(key))
-                    {
-                        key += "#";
-                    }
-      
-                    this.Add(key,values);
+                    XMLHelper.CreateOrUpdateXmlNodeByXPath(fileName,"//config",item,configs[item].ToString());
                 }
             }
-        }
- 
-        /// <summary>
-        /// 保存文件
-        /// </summary>
-        /// <param name="filePath">要保存的Properties文件</param>
-        /// <returns></returns>
-        private void save(string filePath)
-        {
-            if(File.Exists(filePath))
+            else
             {
-                File.Delete(filePath);
+                //如果存在就加载
             }
-            FileStream fileStream = File.Create(filePath);
-            StreamWriter sw = new StreamWriter(fileStream);
-            foreach (object item in keys) 
-            {
-                String key = (String)item;
-                String val = (String)this[key];
-                if(key.StartsWith("#"))
-                {
-                    if(val== "")
-                    {
-                        sw.WriteLine(key);
-                    }
-                    else
-                    {
-                        sw.WriteLine(val);
-                    }
-                }
-                else
-                {
-                    sw.WriteLine(key+"="+val);
-                }
-            }
-            sw.Close();
-            fileStream.Close();
-         }
 
+            loadConfig();
+        }
+        /// <summary>
+        ///将文件中的配置信息加载到静态类中
+        /// </summary>
+        private void loadConfig()
+        {
+            XmlNode web_root = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//web_root");
+            XmlNode index_path = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//index_path");
+            XmlNode max_client = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//max_client");
+            XmlNode encoding = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//encoding");
+            XmlNode server_port = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//server_port");
+            XmlNode buffer_size = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//buffer_size");
+            XmlNode timeout = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//timeout");
+            if (web_root != null)
+            {
+                Config.WEB_ROOT = web_root.InnerText;
+                configs["web_root"] = web_root.InnerText;
+            }
+            if (index_path != null)
+            {
+                Config.INDEX_PATH = index_path.InnerText;
+                configs["index_path"] = index_path.InnerText;
+            }
+            if (max_client != null)
+            {
+                Config.MAX_CLIENT = Int16.Parse(max_client.InnerText);
+                configs["max_client"] = Int16.Parse(max_client.InnerText);
+            }
+            if (encoding != null)
+            {
+                configs["encoding"] = encoding.InnerText;
+                switch (encoding.InnerText)
+                { 
+                    case "utf-8":
+                        Config.ENCODING = Encoding.UTF8;
+                        break;
+                    case "unicode":
+                        Config.ENCODING = Encoding.Unicode;
+                        break;
+                    default:
+                        Config.ENCODING = Encoding.UTF8;
+                        break;
+                }
+                
+            }
+            if (server_port != null)
+            {
+                Config.SERVER_PORT = Int16.Parse(server_port.InnerText);
+                configs["server_port"] = Int16.Parse(server_port.InnerText);
+            }
+            if (buffer_size != null)
+            {
+                Config.BUFFER_SIZE = Int16.Parse(buffer_size.InnerText);
+                configs["buffer_size"] = Int16.Parse(buffer_size.InnerText);
+            }
+            if (timeout != null)
+            {
+                Config.TIMEOUT = Int16.Parse(timeout.InnerText);
+                configs["timeout"] = Int16.Parse(timeout.InnerText);
+            }
+        }
+
+
+        public Dictionary<string, string> getProperties()
+        {
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+            XmlNode parent = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config");
+            foreach (XmlNode node in parent.ChildNodes)
+            {
+                properties.Add(node.Name, node.InnerText);
+            }
+            return properties;
+        }
         /// <summary>
         /// 对外开放的设置属性接口
         /// </summary>
@@ -313,17 +256,14 @@ namespace IOCPServer
         /// <returns>
         /// <param name="success">返回是否设置成功</param>
         /// </returns>
-        public bool setProperty(string key, string value)
+        public bool setProperty(string key, object value)
         {
             bool success = false;
-            try
+            XmlNode node = XMLHelper.GetXmlNodeByXpath(FILENAME, "//config//" + key);
+            if (node != null)
             {
-                this.Add(key, value);
-                this.save(this.fileName);
+                XMLHelper.CreateOrUpdateXmlNodeByXPath(FILENAME, "//config", key, value.ToString());
                 success = true;
-            }
-            catch {
-                throw new Exception("设置配置文件失败");
             }
             return success;
         }
@@ -337,12 +277,12 @@ namespace IOCPServer
             bool success = false;
             try
             {
-                foreach (string item in map.Keys)
+                foreach(string item in map.Keys)
                 {
-                    this.Add(item, map[item]);
+                    this.setProperty(item, map[item]);
+                    
                 }
-                
-                this.save(this.fileName);
+                loadConfig();
                 success = true;
             }
             catch
@@ -352,11 +292,8 @@ namespace IOCPServer
             return success;
         }
 
-        //public static Hashtable getProperties()
-        //{
-        //    return ;
-        //}
     }
+
 }
 
 

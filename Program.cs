@@ -15,7 +15,8 @@ namespace IOCPServer
         {
             //TODO 读取配置文件
             //ConfigHandler;
-
+            ConfigHandler config = new ConfigHandler();
+            config.Init("webapps\\config.xml");
             IOCPServer server = new IOCPServer(Config.SERVER_PORT, Config.MAX_CLIENT);
             server.Start();
             Console.WriteLine("服务器已启动....");

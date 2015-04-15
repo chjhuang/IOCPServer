@@ -112,8 +112,9 @@ namespace IOCPServer
                         {
                             Dictionary<string, string> parameters = request.header.parameters;
                             //这要加一个写锁,而且config的位置和初始化方式要改正下
-                            ConfigHandler configHandler = new ConfigHandler("webapps\\config.properties");
+                            ConfigHandler configHandler = new ConfigHandler();
                             configHandler.setProperty(parameters);
+
                             return getConfigData();
                         }
                         break;
@@ -196,7 +197,8 @@ namespace IOCPServer
         {
             HttpResponse httpResponse = new HttpResponse();
             //获取配置文件对象
-            ConfigHandler config = new ConfigHandler("webapps\\config.properties");
+            ConfigHandler configHandler = new ConfigHandler();
+            Dictionary<string, string> config = configHandler.getProperties();
             
             //将返回值硬编码进response中
             string titleStr = "CGLZ Simple Web Server Configuration";
@@ -205,7 +207,7 @@ namespace IOCPServer
             //构造response内容
             string responseBody = container+ "<form action=\"/config.html\" method=\"post\">";
             
-            foreach (object item in config.Keys)
+            foreach (string item in config.Keys)
             {
                 responseBody += "<lable class=\"con_name\">" + translate(item.ToString()) + "</lable>" +
                             "<input class=\"noneinput\" type=\"text\" name=\"" + item.ToString() + "\" value=\"" + config[item] + "\">" + "</input><br/>";
@@ -233,12 +235,15 @@ namespace IOCPServer
         {
             string output = "";
             switch (input)
-            { 
+            {
                 case "index_path":
                     output = "首页路径";
                     break;
-                case "path":
+                case "web_root":
                     output = "服务器根目录";
+                    break;
+                case "server_port":
+                    output = "服务器端口号";
                     break;
                 case "timeout":
                     output = "等待时间(毫秒)";

@@ -21,7 +21,7 @@ namespace IOCPServer
         private void TimeOutTest()
         {
             SocketAsyncEventArgs[] userTokenArray = null;
-            m_asyncSocketServer._ObjectList.CopyList(ref userTokenArray);
+            m_asyncSocketServer.ObjectList.CopyList(ref userTokenArray);
 
             for (int i = 0; i < userTokenArray.Length; i++)
             {
@@ -29,9 +29,8 @@ namespace IOCPServer
                     break;
                 try
                 {
-                    Console.WriteLine("连接{0}延时时间为{1}",((Socket)userTokenArray[i].UserToken).RemoteEndPoint,((Socket)userTokenArray[i].UserToken).ReceiveTimeout);
-                    if (((Socket)userTokenArray[i].UserToken).SendTimeout == 0 &&
-                        ((Socket)userTokenArray[i].UserToken).ReceiveTimeout-- <= 0) //超时Socket断开
+                    Console.WriteLine("连接{0}延时时间为{1}",((Socket)userTokenArray[i].UserToken).RemoteEndPoint,((Socket)userTokenArray[i].UserToken).SendTimeout);
+                    if (((Socket)userTokenArray[i].UserToken).SendTimeout-- == 0) //超时Socket断开
                     {                                                 
                         lock (userTokenArray[i])
                         {    
@@ -51,7 +50,7 @@ namespace IOCPServer
             {
                 TimeOutTest();
 
-                for (int i = 0; i <2 * 1000 / 10; i++) //每2秒检测一次
+                for (int i = 0; i <1 * 1000 / 10; i++) //每2秒检测一次
                 {
                     if (!m_thread.IsAlive)
                         break;

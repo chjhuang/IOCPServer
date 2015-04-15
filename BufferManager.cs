@@ -64,8 +64,11 @@ namespace IOCPServer
         // This frees the buffer back to the buffer pool
         public void FreeBuffer(SocketAsyncEventArgs args)
         {
-            m_freeIndexPool.Push(args.Offset);
-            args.SetBuffer(null, 0, 0);
+            lock (args)
+            {
+                m_freeIndexPool.Push(args.Offset);
+                args.SetBuffer(null, 0, 0);
+            }
         }
 
     }
