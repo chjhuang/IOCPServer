@@ -60,13 +60,22 @@ namespace IOCPServer
             return true;
         }
 
+        // frees the buffer back to the buffer pool
+        public void returnBuffer(SocketAsyncEventArgs args)
+        {
+            m_freeIndexPool.Push(args.Offset);
+        }
+
         // Removes the buffer from a SocketAsyncEventArg object.  
-        // This frees the buffer back to the buffer pool
         public void FreeBuffer(SocketAsyncEventArgs args)
         {
             lock (args)
             {
-                m_freeIndexPool.Push(args.Offset);
+                if(args.Buffer == m_buffer)
+                {
+                    returnBuffer(args);
+                }
+
                 args.SetBuffer(null, 0, 0);
             }
         }

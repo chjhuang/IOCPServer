@@ -426,7 +426,8 @@ namespace IOCPServer
             if (s.Connected)
             {
                 Log4Debug(String.Format("发送数据到 {0} {1}字节", s.RemoteEndPoint.ToString(), data.Length));
-
+                
+                _bufferManager.returnBuffer(e); //将内存区归还到内存池
                 e.SetBuffer(data, 0, data.Length); //设置发送数据
                 if (!s.SendAsync(e))//投递发送请求，这个函数有可能同步发送出去，这时返回false，并且不会引发SocketAsyncEventArgs.Completed事件
                 {
