@@ -1,0 +1,109 @@
+﻿2015/4/18 16:19:23 Info  (Main._nExecuteAssembly.RunUsersAssembly) #### 服务器启动完成 ####
+2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3983 连入, 共有 1 个连接。
+2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3984 连入, 共有 2 个连接。
+2015/4/18 16:19:27 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 435字节 数据为
+GET / HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3985 连入, 共有 3 个连接。
+2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2207字节
+2015/4/18 16:19:28 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3987 连入, 共有 4 个连接。
+2015/4/18 16:19:28 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 425字节 数据为
+GET /css/style.css HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/css,*/*;q=0.1
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Referer: http://localhost:8088/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
+2015/4/18 16:19:28 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 382字节 数据为
+GET /favicon.ico HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Accept: */*
+Referer: http://localhost:8088/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 1275字节
+2015/4/18 16:19:32 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 453字节 数据为
+GET /config.html HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Referer: http://localhost:8088/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:32 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 1500字节
+2015/4/18 16:19:33 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 410字节 数据为
+GET /css/style.css HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Accept: text/css,*/*;q=0.1
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Referer: http://localhost:8088/config.html
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:33 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
+2015/4/18 16:19:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
+2015/4/18 16:19:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
+2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3984 断开连接!
+2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3985 断开连接!
+2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为3
+2015/4/18 16:19:38 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为2
+2015/4/18 16:19:38 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 463字节 数据为
+GET /index.html HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Referer: http://localhost:8088/config.html
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:38 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2207字节
+2015/4/18 16:19:38 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 409字节 数据为
+GET /css/style.css HTTP/1.1
+Host: localhost:8088
+Connection: keep-alive
+Accept: text/css,*/*;q=0.1
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+Referer: http://localhost:8088/index.html
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
+Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
+
+
+2015/4/18 16:19:38 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
+2015/4/18 16:19:46 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 客户 127.0.0.1:3983 断开连接!
+2015/4/18 16:19:46 Info  (ProcessReceive.OnIOCompleted.RunInternal) 异步接收操作取消
+2015/4/18 16:19:46 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为1
+2015/4/18 16:19:47 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
+2015/4/18 16:19:47 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3987 断开连接!
+2015/4/18 16:19:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为0

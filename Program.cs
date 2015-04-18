@@ -19,7 +19,7 @@ namespace IOCPServer
             config.Init("webapps\\config.xml");
             IOCPServer server = new IOCPServer(Config.SERVER_PORT, Config.MAX_CLIENT);
             server.Start();
-            Console.WriteLine("服务器已启动....");
+            ConsoleLogWriter.Instance.Write("Main", LogPrio.Info, "#### 服务器启动完成 ####");
             System.Console.ReadLine();
         }
     }

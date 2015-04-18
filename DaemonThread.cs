@@ -7,10 +7,12 @@ using System.Threading;
 
 namespace IOCPServer
 {
-    class DaemonThread : Object
+    class DaemonThread
     {
         private Thread m_thread;
         private IOCPServer m_asyncSocketServer;
+        private ILogWriter logWriter = ConsoleLogWriter.Instance;
+        private string sourceName = "DaemonThread";
 
         public DaemonThread(IOCPServer asyncSocketServer)
         {
@@ -29,7 +31,7 @@ namespace IOCPServer
                     break;
                 try
                 {
-                    Console.WriteLine("连接{0}延时时间为{1}",((Socket)userTokenArray[i].UserToken).RemoteEndPoint,((Socket)userTokenArray[i].UserToken).SendTimeout);
+                    //Console.WriteLine("连接{0}延时时间为{1}",((Socket)userTokenArray[i].UserToken).RemoteEndPoint,((Socket)userTokenArray[i].UserToken).SendTimeout);
                     if (((Socket)userTokenArray[i].UserToken).SendTimeout-- == 0) //超时Socket断开
                     {                                                 
                         lock (userTokenArray[i])
@@ -38,9 +40,9 @@ namespace IOCPServer
                         }
                     }
                 }
-                catch (Exception E)
+                catch (Exception ex)
                 {
-
+                    logWriter.Write(sourceName, LogPrio.Error, ex.Message);
                 }
             }
         }

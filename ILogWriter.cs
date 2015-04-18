@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace HttpServer
+namespace IOCPServer
 {
     
     //枚举日志优先级条目
@@ -68,18 +68,20 @@ namespace HttpServer
             StringBuilder sb = new StringBuilder();
             sb.Append(DateTime.Now.ToString());
             sb.Append(" ");
-            sb.Append(prio.ToString().PadRight(10));
-            sb.Append(" | ");
+            sb.Append(prio.ToString().PadRight(5));
+            sb.Append(" (");
 #if DEBUG
             StackTrace trace = new StackTrace();
             StackFrame[] frames = trace.GetFrames();
             int endFrame = frames.Length > 4 ? 4 : frames.Length;
             int startFrame = frames.Length > 0 ? 1 : 0;
-            for (int i = startFrame; i < endFrame; ++i)
+            for (int i = startFrame; i < endFrame - 1; ++i)
             {
                 sb.Append(frames[i].GetMethod().Name);
-                sb.Append(" -> ");
+                sb.Append(".");
             }
+            sb.Append(frames[endFrame - 1].GetMethod().Name);
+            sb.Append(") ");
 #else
             sb.Append(System.Reflection.MethodBase.GetCurrentMethod().Name);
             sb.Append(" | ");
@@ -91,7 +93,7 @@ namespace HttpServer
             Console.ForegroundColor = ConsoleColor.Gray;
 
             //将日志写入目标文件
-            string logPath = HttpContext.Current.Server.MapPath("log.txt"); //文件相对路径
+            string logPath = @"Log\log.txt"; //文件相对路径
             if (System.IO.File.Exists(logPath))
             {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(logPath, true, Encoding.UTF8);
