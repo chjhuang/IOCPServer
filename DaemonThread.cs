@@ -31,11 +31,11 @@ namespace IOCPServer
                     break;
                 try
                 {
-                    //Console.WriteLine("连接{0}延时时间为{1}",((Socket)userTokenArray[i].UserToken).RemoteEndPoint,((Socket)userTokenArray[i].UserToken).SendTimeout);
                     if (((Socket)userTokenArray[i].UserToken).SendTimeout-- == 0) //超时Socket断开
                     {                                                 
                         lock (userTokenArray[i])
-                        {    
+                        {
+                            logWriter.Write(sourceName, LogPrio.Info, String.Format("与客户端 {0} 的长连接超时", ((Socket)userTokenArray[i].UserToken).RemoteEndPoint));
                             m_asyncSocketServer.CloseClientSocket(userTokenArray[i]);
                         }
                     }

@@ -1,7 +1,7 @@
-﻿2015/4/18 16:19:23 Info  (Main._nExecuteAssembly.RunUsersAssembly) #### 服务器启动完成 ####
-2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3983 连入, 共有 1 个连接。
-2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3984 连入, 共有 2 个连接。
-2015/4/18 16:19:27 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 435字节 数据为
+﻿2015/4/23 11:16:24 Info  (Main._nExecuteAssembly.RunUsersAssembly) #### 服务器启动完成 ####
+2015/4/23 11:16:29 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4077 连入, 共有 1 个连接。
+2015/4/23 11:16:29 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4078 连入, 共有 2 个连接。
+2015/4/23 11:16:29 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 435字节 数据为
 GET / HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
@@ -13,14 +13,12 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:27 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3985 连入, 共有 3 个连接。
-2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2207字节
-2015/4/18 16:19:28 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:3987 连入, 共有 4 个连接。
-2015/4/18 16:19:28 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 425字节 数据为
+2015/4/23 11:16:29 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4079 连入, 共有 3 个连接。
+2015/4/23 11:16:29 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 2207字节
+2015/4/23 11:16:30 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 399字节 数据为
 GET /css/style.css HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
-Cache-Control: max-age=0
 Accept: text/css,*/*;q=0.1
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
 Referer: http://localhost:8088/
@@ -29,21 +27,8 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
-2015/4/18 16:19:28 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 382字节 数据为
-GET /favicon.ico HTTP/1.1
-Host: localhost:8088
-Connection: keep-alive
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
-Accept: */*
-Referer: http://localhost:8088/
-Accept-Encoding: gzip, deflate, sdch
-Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
-Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
-
-
-2015/4/18 16:19:28 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 1275字节
-2015/4/18 16:19:32 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 453字节 数据为
+2015/4/23 11:16:30 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 2560字节
+2015/4/23 11:16:35 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 453字节 数据为
 GET /config.html HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
@@ -55,8 +40,8 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:32 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 1500字节
-2015/4/18 16:19:33 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 410字节 数据为
+2015/4/23 11:16:35 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 1500字节
+2015/4/23 11:16:35 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 410字节 数据为
 GET /css/style.css HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
@@ -68,14 +53,8 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:33 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
-2015/4/18 16:19:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
-2015/4/18 16:19:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
-2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3984 断开连接!
-2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3985 断开连接!
-2015/4/18 16:19:37 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为3
-2015/4/18 16:19:38 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为2
-2015/4/18 16:19:38 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 463字节 数据为
+2015/4/23 11:16:35 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 2560字节
+2015/4/23 11:16:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 463字节 数据为
 GET /index.html HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
@@ -87,8 +66,8 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:38 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2207字节
-2015/4/18 16:19:38 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:3983 409字节 数据为
+2015/4/23 11:16:37 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 2207字节
+2015/4/23 11:16:37 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4077 409字节 数据为
 GET /css/style.css HTTP/1.1
 Host: localhost:8088
 Connection: keep-alive
@@ -100,10 +79,79 @@ Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4
 Cookie: remember_token=7aLtIRCD_gJDniA5a9RWzw
 
 
-2015/4/18 16:19:38 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:3983 2560字节
-2015/4/18 16:19:46 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 客户 127.0.0.1:3983 断开连接!
-2015/4/18 16:19:46 Info  (ProcessReceive.OnIOCompleted.RunInternal) 异步接收操作取消
-2015/4/18 16:19:46 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为1
-2015/4/18 16:19:47 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端已断开连接
-2015/4/18 16:19:47 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 客户 127.0.0.1:3987 断开连接!
-2015/4/18 16:19:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为0
+2015/4/23 11:16:37 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4077 2560字节
+2015/4/23 11:16:45 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4078 主动断开连接！
+2015/4/23 11:16:45 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4079 主动断开连接！
+2015/4/23 11:16:45 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4078 的连接
+2015/4/23 11:16:45 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4079 的连接
+2015/4/23 11:16:45 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为2
+2015/4/23 11:16:45 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为1
+2015/4/23 11:16:45 Info  (TimeOutTest.DaemonThreadStart.RunInternal) 连接127.0.0.1:4077长连接超时
+2015/4/23 11:16:45 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 服务器断开与 127.0.0.1:4077 的连接
+2015/4/23 11:16:45 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端异步接收操作取消.
+2015/4/23 11:16:45 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为0
+2015/4/23 11:22:22 Info  (Main._nExecuteAssembly.RunUsersAssembly) #### 服务器启动完成 ####
+2015/4/23 11:22:34 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4167 连入, 共有 1 个连接。
+2015/4/23 11:22:34 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4168 连入, 共有 2 个连接。
+2015/4/23 11:22:34 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4169 连入, 共有 3 个连接。
+2015/4/23 11:22:34 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4167 409字节数据.
+2015/4/23 11:22:34 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4167 2207字节
+2015/4/23 11:22:34 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4167 399字节数据.
+2015/4/23 11:22:34 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4167 2560字节
+2015/4/23 11:22:43 Info  (TimeOutTest.DaemonThreadStart.RunInternal) 连接127.0.0.1:4167长连接超时
+2015/4/23 11:22:43 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 服务器断开与 127.0.0.1:4167 的连接
+2015/4/23 11:22:43 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端异步接收操作取消.
+2015/4/23 11:22:43 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为2
+2015/4/23 11:22:48 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4168 主动断开连接！
+2015/4/23 11:22:48 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4169 主动断开连接！
+2015/4/23 11:22:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4168 的连接
+2015/4/23 11:22:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4169 的连接
+2015/4/23 11:22:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为1
+2015/4/23 11:22:48 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为0
+2015/4/23 11:23:43 Info  (Main._nExecuteAssembly.RunUsersAssembly) #### 服务器启动完成 ####
+2015/4/23 11:23:46 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4186 连入, 共有 1 个连接。
+2015/4/23 11:23:46 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4187 连入, 共有 2 个连接。
+2015/4/23 11:23:46 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 435字节数据.
+2015/4/23 11:23:46 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4188 连入, 共有 3 个连接。
+2015/4/23 11:23:47 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4189 连入, 共有 4 个连接。
+2015/4/23 11:23:47 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 2207字节
+2015/4/23 11:23:47 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 399字节数据.
+2015/4/23 11:23:47 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 2560字节
+2015/4/23 11:23:50 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 453字节数据.
+2015/4/23 11:23:50 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 1500字节
+2015/4/23 11:23:51 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 410字节数据.
+2015/4/23 11:23:51 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 2560字节
+2015/4/23 11:23:52 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 463字节数据.
+2015/4/23 11:23:52 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 2207字节
+2015/4/23 11:23:53 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4186 409字节数据.
+2015/4/23 11:23:53 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4186 2560字节
+2015/4/23 11:23:56 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4187 主动断开连接！
+2015/4/23 11:23:56 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4188 主动断开连接！
+2015/4/23 11:23:56 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4187 的连接
+2015/4/23 11:23:56 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4188 的连接
+2015/4/23 11:23:56 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为2
+2015/4/23 11:23:56 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为3
+2015/4/23 11:24:00 Info  (TimeOutTest.DaemonThreadStart.RunInternal) 与客户端 127.0.0.1:4186 的长连接超时
+2015/4/23 11:24:00 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 服务器断开与 127.0.0.1:4186 的连接
+2015/4/23 11:24:00 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端异步接收操作取消.
+2015/4/23 11:24:00 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为1
+2015/4/23 11:24:06 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4189 主动断开连接！
+2015/4/23 11:24:06 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4189 的连接
+2015/4/23 11:24:06 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为0
+2015/4/23 11:25:19 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4219 连入, 共有 1 个连接。
+2015/4/23 11:25:19 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4219 463字节数据.
+2015/4/23 11:25:19 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4219 1500字节
+2015/4/23 11:25:19 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4219 410字节数据.
+2015/4/23 11:25:19 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4219 2560字节
+2015/4/23 11:25:19 Info  (ProcessAccept.OnAcceptCompleted.RunInternal) 客户 127.0.0.1:4220 连入, 共有 2 个连接。
+2015/4/23 11:25:21 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4219 463字节数据.
+2015/4/23 11:25:21 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4219 2207字节
+2015/4/23 11:25:21 Info  (ProcessReceive.OnIOCompleted.RunInternal) 收到 127.0.0.1:4219 409字节数据.
+2015/4/23 11:25:21 Info  (Send.OnResponseReady.requestProcessor) 发送数据到 127.0.0.1:4219 2560字节
+2015/4/23 11:25:29 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端 127.0.0.1:4220 主动断开连接！
+2015/4/23 11:25:29 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 服务器断开与 127.0.0.1:4220 的连接
+2015/4/23 11:25:29 Info  (CloseClientSocket.ProcessReceive.OnIOCompleted) 现在的连接数量为1
+2015/4/23 11:25:30 Info  (TimeOutTest.DaemonThreadStart.RunInternal) 与客户端 127.0.0.1:4219 的长连接超时
+2015/4/23 11:25:30 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 服务器断开与 127.0.0.1:4219 的连接
+2015/4/23 11:25:30 Info  (ProcessReceive.OnIOCompleted.RunInternal) 客户端异步接收操作取消.
+2015/4/23 11:25:30 Info  (CloseClientSocket.TimeOutTest.DaemonThreadStart) 现在的连接数量为0

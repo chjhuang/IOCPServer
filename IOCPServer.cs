@@ -66,6 +66,9 @@ namespace IOCPServer
         /// </summary>
         Util _util;
 
+        private ILogWriter logWriter = ConsoleLogWriter.Instance;
+        private string sourceName = "IOCPServer";
+
         private bool disposed = false;
 
         #endregion
@@ -275,17 +278,12 @@ namespace IOCPServer
                         //将对象池中的一个空闲对象取出与当前的用户socket绑定
                         SocketAsyncEventArgs asyniar = _objectPool.Pop();
 
-                        //设置最长等待时间
-                        //s.ReceiveTimeout = (int)Config.TIMEOUT;
                         s.DontFragment = true;  //表示新的连接        
                         // assign a byte buffer from the buffer pool to the SocketAsyncEventArg object
                         _bufferManager.SetBuffer(asyniar);
                         asyniar.UserToken = s;
 
-                        //添加已连接客户端socket列表
-                        //_objectList.Add(asyniar);
-
-                        Log4Debug(String.Format("客户 {0} 连入, 共有 {1} 个连接。", s.RemoteEndPoint.ToString(), _clientCount));
+                        logWriter.Write(sourceName, LogPrio.Info, String.Format("客户 {0} 连入, 共有 {1} 个连接。", s.RemoteEndPoint.ToString(), _clientCount));
                         //这里是投递接收请求，如果返回false则证明是I/O 操作同步完成，但是此时不会引发Completed事件
                         //如果返回的是true，则进程被挂起，引发Completed事件
                         if (!s.ReceiveAsync(asyniar))//投递接收请求
@@ -295,7 +293,7 @@ namespace IOCPServer
                     }
                     catch (SocketException ex)
                     {
-                        Log4Debug(String.Format("接收客户 {0} 数据出错, 异常信息： {1} 。", s.RemoteEndPoint, ex.ToString()));
+                        logWriter.Write(sourceName, LogPrio.Error, String.Format("接受客户 {0} 连接出错, 异常信息： {1} .", s.RemoteEndPoint, ex.ToString()));
                         //TODO 异常处理
                     }
                     //投递下一个接受请求
@@ -367,7 +365,7 @@ namespace IOCPServer
                         byte[] data = new byte[e.BytesTransferred];
                         Array.Copy(e.Buffer, e.Offset, data, 0, data.Length);//从e.Buffer块中复制数据出来，保证它可重用
                         info = Encoding.UTF8.GetString(data);
-                        IOCPServer.Log4Debug(String.Format("收到 {0} {1}字节 数据为\n{2}", s.RemoteEndPoint.ToString(), data.Length, info));
+                        logWriter.Write(sourceName, LogPrio.Info, String.Format("收到 {0} {1}字节数据.", s.RemoteEndPoint.ToString(), data.Length));
 
                         //处理HTTP请求
                         _util.processRequest(e, info);
@@ -376,18 +374,19 @@ namespace IOCPServer
                 else
                 {
                     //TODO 传入数据长度为0情况下，处理分支(相当于没读到数据，一般不会发送IOCompleted请求)
-                    Log4Debug("No Data!");
+                    logWriter.Write(sourceName, LogPrio.Info, String.Format("客户端 {0} 主动断开连接！", s.RemoteEndPoint.ToString()));
                     CloseClientSocket(e);
                 }
             }
             else if (e.SocketError == SocketError.OperationAborted)
             {
-                Console.WriteLine("SocketError.OperationAborted");
+                logWriter.Write(sourceName, LogPrio.Info, "客户端异步接收操作取消.");
                 return;
             }
             else
             {
                 //TODO 接收不成功，可能是因为缓冲区过小，因此应该判断这种情况，增大缓冲区，重新接受
+                logWriter.Write(sourceName, LogPrio.Error, String.Format("客户端{0} 数据接收失败: {1}", ((Socket)e.UserToken).RemoteEndPoint.ToString(), e.SocketError.ToString()));
                 CloseClientSocket(e);
             }
         }
@@ -425,7 +424,7 @@ namespace IOCPServer
             Socket s = (Socket)e.UserToken;
             if (s.Connected)
             {
-                Log4Debug(String.Format("发送数据到 {0} {1}字节", s.RemoteEndPoint.ToString(), data.Length));
+                logWriter.Write(sourceName, LogPrio.Info, String.Format("发送数据到 {0} {1}字节", s.RemoteEndPoint.ToString(), data.Length));
                 
                 _bufferManager.returnBuffer(e); //将内存区归还到内存池
                 e.SetBuffer(data, 0, data.Length); //设置发送数据
@@ -437,6 +436,7 @@ namespace IOCPServer
             }
             else 
             {
+                logWriter.Write(sourceName, LogPrio.Error, String.Format("客户端 {0} 已断开连接，数据发送失败!", s.RemoteEndPoint.ToString()));
                 CloseClientSocket(e);
             }
         }
@@ -516,6 +516,7 @@ namespace IOCPServer
             }
             else
             {
+                logWriter.Write(sourceName, LogPrio.Error, String.Format("客户端{0} 数据发送失败: {1}", ((Socket)e.UserToken).RemoteEndPoint.ToString(), e.SocketError.ToString()));
                 CloseClientSocket(e);
             }
         }
@@ -536,11 +537,11 @@ namespace IOCPServer
             try
             {
                 s.Shutdown(SocketShutdown.Both);
-                Log4Debug(String.Format("客户 {0} 断开连接!", s.RemoteEndPoint.ToString()));
+                logWriter.Write(sourceName, LogPrio.Info, String.Format("服务器断开与 {0} 的连接", s.RemoteEndPoint.ToString()));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("关闭连接发生错误");
+                logWriter.Write(sourceName, LogPrio.Error, "断开连接发生错误: " + ex.Message);
                 // Throw if client has closed, so it is not necessary to catch.
             }
             finally
@@ -556,11 +557,11 @@ namespace IOCPServer
                     
                     _maxAcceptedClients.Release();  //断开连接，可以接收的连接数+1
                     Interlocked.Decrement(ref _clientCount);
-                    Log4Debug(String.Format("现在的连接数量为{0}", _clientCount) );
+                    logWriter.Write(sourceName, LogPrio.Info, String.Format("现在的连接数量为{0}", _clientCount) );
                 }
-                catch (Exception be)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(be.Message);
+                    logWriter.Write(sourceName, LogPrio.Error, "关闭连接错误: " + ex.Message);
                 }
             }           
         }
@@ -601,18 +602,12 @@ namespace IOCPServer
                     catch (SocketException ex)
                     {
                         //TODO 事件
-                        Log4Debug(ex.Message);
+                        logWriter.Write(sourceName, LogPrio.Error, ex.Message);
                     }
                 }
                 disposed = true;
             }
         }
         #endregion
-
-        public static void Log4Debug(string msg)
-        {
-            Console.WriteLine("notice:" + msg);
-        }
-
     }
 }
